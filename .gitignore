@@ -1,0 +1,11 @@
+_test_images/
+test_images/
+env2/
+build/
+*.png
+*.bmp
+*.jpg
+*.ico
+*.pyc
+*.ttf
+test.py
