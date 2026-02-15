@@ -4,6 +4,7 @@ from .constants import (
 	ALL_FORMATS_C,
 	DEFAULT_KX,
 	DEFAULT_KY,
+	DEFAULT_RARITY,
 	OPS_SEPARATOR,
 	DEFAULT_KEEP_W,
 	DEFAULT_KEEP_H,
@@ -38,6 +39,12 @@ from .transformators import (
 )
 
 
+def parse_rarity(parser_args):
+	if parser_args.rarity is None or parser_args.rarity == ALL_FORMATS_C:
+		return DEFAULT_RARITY
+	return get_int_from_str(parser_args.rarity)
+
+
 def parse_enhance_mode(parser_args):
 	if parser_args.enhance_mode is None or parser_args.enhance_mode == ALL_FORMATS_C:
 		return DEFAULT_ENHANCE_MODE
@@ -54,6 +61,12 @@ def parse_color_from(parser_args):
 	if parser_args.color_from is None or parser_args.color_from == ALL_FORMATS_C:
 		return DEFAULT_PIXEL_COLOR
 	return get_color_from_str(parser_args.color_from)
+
+
+def parse_color_filler(parser_args):
+	if parser_args.color_filler is None or parser_args.color_filler == ALL_FORMATS_C:
+		return DEFAULT_PIXEL_COLOR
+	return get_color_from_str(parser_args.color_filler)
 
 
 def parse_color_to(parser_args):

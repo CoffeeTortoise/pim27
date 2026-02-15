@@ -2,6 +2,8 @@ import os
 
 import sys
 
+import time
+
 from fstring import f
 
 
@@ -29,6 +31,16 @@ RGBA_FORMATS = set(
 		'tga', 'webp'
 	]
 )
+
+BUILD_DAY = '14 February, 2026'
+
+TODAY = time.ctime(time.time())
+
+MIN_RARITY = 0
+
+MAX_RARITY = 10000
+
+DEFAULT_RARITY = MAX_RARITY
 
 ASCII_CODE_MAX = 126
 

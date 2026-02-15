@@ -14,6 +14,7 @@ build_exe_options = {
 		'sys',
 		'PIL',
 		'time',
+		'random',
 		'fstring',
 		'argparse',
 		'collections'
@@ -27,7 +28,7 @@ build_exe_options = {
 
 setup(
 	name='pim27',
-	version='0.1.1',
+	version='0.1.2',
 	description='App for some stuff with images',
 	options={
 		'build_exe': build_exe_options

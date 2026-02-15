@@ -5,6 +5,7 @@ import argparse
 from fstring import f
 
 from image_ops.constants import (
+	BUILD_DAY,
 	ALL_FORMATS_C,
 	DEFAULT_KX,
 	DEFAULT_KY,
@@ -14,6 +15,9 @@ from image_ops.constants import (
 	DEFAULT_CHAR_W,
 	DEFAULT_CHAR_H,
 	OPS_SEPARATOR,
+	MIN_RARITY,
+	MAX_RARITY,
+	DEFAULT_RARITY,
 	ASCII_TXT_FOLDER,
 	ASCII_TXT_OUT_FORMAT,
 	ASCII_IMAGE_OUT_FORMAT,
@@ -37,11 +41,15 @@ from image_ops.constants import (
 
 from image_ops.argument_parser import parse_operation
 
+from image_ops.ops.rarefaction import cli_rarefaction
+
 from image_ops.ops.resize import cli_resize
 
 from image_ops.ops.convert import cli_convert
 
 from image_ops.ops.rotate import cli_rotate
+
+from image_ops.ops.heatmap import cli_heatmap
 
 from image_ops.ops.ascii import cli_ascii
 
@@ -68,6 +76,8 @@ from image_ops.ops.flip import (
 
 
 OPS = {
+	'rarefaction': cli_rarefaction,
+	'heatmap': cli_heatmap,
 	'convert': cli_convert,
 	'resize': cli_resize,
 	'color': cli_color,
@@ -94,16 +104,23 @@ DEFAULT_PIXEL_COLOR_STR = PIXEL_COLOR_SEP.join(str(e) for e in DEFAULT_PIXEL_COL
 
 
 def test():
+
 	test_dir = 'test_images'
 	test_files = [
 		os.path.join(test_dir, f) for f in os.listdir(test_dir)
 	]
-	test_file = '1.png'
+	test_file = '0.bmp'
 
 
 def main():
 	parser = argparse.ArgumentParser(
-		description='cli-utility for some stuff with images'
+		description=f(
+			'''
+				cli-utility for doing some stuff with images.
+				created ${BUILD_DAY} by CoffeeTortoise(https://github.com/CoffeeTortoise) using python27,
+				just because I wanted cli-utility with Pillow library functionality.
+			'''
+		)
 	)
 
 	parser.add_argument(
@@ -124,6 +141,7 @@ def main():
 			Arguments only for rotate: rotate_degree.
 			Arguments only for pixel: color_from, color_to. Also pixel can be used for
 			copying images.
+			Arguments only for rarefaction: rarity(less rarity = more color filler pixels), color_filler.
 			Arguments for pixel and cut: pixel_x, pixel_x1, pixel_y, pixel_y1.
 			Arguments only for ascii: fnt_path, char_w, char_h. Also ascii can accept ${ASCII_TXT_OUT_FORMAT}
 			format files as a target and output file always ${ASCII_IMAGE_OUT_FORMAT}. Also in ascii, paths
@@ -140,6 +158,17 @@ def main():
 		Path to the target. Target can be file or directory.
 		Argument type: string.
 		'''
+	)
+
+	parser.add_argument(
+		'-ra', '--rarity', type=str, required=False,
+		help=f(
+			'''
+			Rarity k. Value between ${MIN_RARITY} and ${MAX_RARITY} inclusive.
+			By default: ${DEFAULT_RARITY}.
+			Argument type: unsigned integer.
+			'''
+		)
 	)
 
 	parser.add_argument(
@@ -301,6 +330,17 @@ def main():
 			'''
 			RGB or RGBA result color in brackets(example: (0,0,0) or (0,0,0,255)), where separator ${PIXEL_COLOR_SEP}.
 			By default: ${DEFAULT_PIXEL_COLOR_STR}. If you don\'t want to change color, set it ${DO_NOT_CHANGE_COLOR}.
+			Argument type: str or tuple of integers.
+			'''
+		)
+	)
+
+	parser.add_argument(
+		'-cofi', '--color_filler', type=str, required=False,
+		help=f(
+			'''
+			RGB or RGBA color in brackets(example: (0,0,0) or (0,0,0,255)), where separator ${PIXEL_COLOR_SEP}.
+			By default: ${DEFAULT_PIXEL_COLOR_STR}.
 			Argument type: str or tuple of integers.
 			'''
 		)
